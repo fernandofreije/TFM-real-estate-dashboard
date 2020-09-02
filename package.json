@@ -10,7 +10,9 @@
     "lint": "eslint './**/*.{ts,tsx}'"
   },
   "dependencies": {
+    "mongodb": "^3.6.1",
     "next": "9.5.2",
+    "next-connect": "^0.8.1",
     "react": "16.13.1",
     "react-autosuggest": "^10.0.2",
     "react-dom": "16.13.1"

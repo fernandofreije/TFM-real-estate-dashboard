@@ -22,10 +22,10 @@ export default function ProvinceView({ todaySummary, province }: ProvinceViewPro
           Total Records: <span>{total}</span>
         </h3>
         <h3>
-          Avg Price: <span>{withSeparator(avg_price)} €</span>
+          Average Price: <span>{withSeparator(avg_price)} €</span>
         </h3>
         <h3>
-          Total Records:{' '}
+          Average Size:{' '}
           <span>
             {Math.round(avg_size * 10) / 10} m<sup>2</sup>
           </span>

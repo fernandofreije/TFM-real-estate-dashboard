@@ -1,8 +1,8 @@
-import '../styles/globals.css';
 import { AppPropsType } from 'next/dist/next-server/lib/utils';
-import { config } from 'dotenv/types';
+import '../styles/globals.css';
+import { ReactElement } from 'react';
 
-function MyApp({ Component, pageProps }: AppPropsType) {
+function MyApp({ Component, pageProps }: AppPropsType): ReactElement {
   return <Component {...pageProps} />;
 }
 

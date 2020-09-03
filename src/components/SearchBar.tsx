@@ -3,8 +3,11 @@ import { ReactElement, useState } from 'react';
 import Autosuggest from 'react-autosuggest';
 import styles from '../styles/SearchBar.module.css';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement {
+  const router = useRouter();
+
   const getSuggestions = async (value: string) => {
     let provinces: string[] = [];
     const response = await fetch('/api/provinces');
@@ -47,6 +50,12 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
     setSuggestions([]);
   };
 
+  const onSuggestionSelected = () => {
+    if (suggestions.includes(value)) {
+      router.push(`/province/${value}`);
+    }
+  };
+
   const inputProps = {
     placeholder: 'Type a location',
     value,
@@ -59,10 +68,12 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
       suggestions={suggestions}
       onSuggestionsFetchRequested={onSuggestionsFetchRequested}
       onSuggestionsClearRequested={onSuggestionsClearRequested}
+      onSuggestionSelected={onSuggestionSelected}
       inputProps={inputProps}
       getSuggestionValue={getSuggestionValue}
       renderSuggestion={renderSuggestion}
       {...props}
+      className={styles.container}
     />
   );
 }

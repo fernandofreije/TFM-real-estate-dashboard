@@ -7,7 +7,7 @@ export default function Home(): ReactElement {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Real Estate Data Visualizer</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <SearchBar></SearchBar>

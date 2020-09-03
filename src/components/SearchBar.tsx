@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 import { ReactElement, useState } from 'react';
 import Autosuggest from 'react-autosuggest';
 import styles from '../styles/SearchBar.module.css';
+import Link from 'next/link';
 
 export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement {
   const getSuggestions = async (value: string) => {
@@ -29,7 +30,11 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
   };
 
   const getSuggestionValue = (suggestion) => suggestion;
-  const renderSuggestion = (suggestion) => <span>{suggestion}</span>;
+  const renderSuggestion = (suggestion) => (
+    <Link href={`/province/${suggestion}`}>
+      <span>{suggestion}</span>
+    </Link>
+  );
 
   // Autosuggest will call this function every time you need to update suggestions.
   // You already implemented this logic above, so just use it.

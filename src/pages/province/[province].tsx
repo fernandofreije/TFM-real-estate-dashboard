@@ -17,7 +17,7 @@ export default function ProvinceView({ todaySummary, province }: ProvinceViewPro
   return (
     <Layout>
       <div className={styles.container}>
-        <h1>{province}</h1>
+        <h1>{province} Today</h1>
         <h3>
           Total Records: <span>{total}</span>
         </h3>

@@ -3,3 +3,10 @@
   padding: 20px;
   margin: 0;
 }
+
+@media (max-width: 600px) {
+  .container {
+    width: 90%;
+    font-size: 30px;
+  }
+}

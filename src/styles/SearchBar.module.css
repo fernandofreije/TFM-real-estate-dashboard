@@ -3,14 +3,7 @@
 }
 
 .container {
-  position: absolute;
-  margin-left: auto;
-  margin-right: auto;
-  left: 0;
-  right: 0;
   margin-top: 20px;
-  text-align: center;
-  flex: 1;
 }
 
 .suggestion {

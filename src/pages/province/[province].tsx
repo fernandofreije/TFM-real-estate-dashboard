@@ -115,7 +115,7 @@ export async function getServerSideProps({
   if (!operation || !Object.values(Operation).includes(operation)) {
     res.statusCode = 302;
     res.setHeader('Location', req.url + `?operation=${Operation.SALE}`);
-    return {} as GetServerSidePropsResult<ProvinceViewProps>;
+    res.end();
   }
 
   const todaySummary = await new RealEstateMongoDriver().todaysSummary({ province, operation });

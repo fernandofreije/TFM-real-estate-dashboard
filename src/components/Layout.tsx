@@ -25,7 +25,7 @@ export default function Layout({ children, province, currentOperation }: LayoutP
           <div className={styles.operationSelectorContainer}>
             <Link href={`${province}?operation=${Operation.SALE}`}>
               <a
-                className={currentOperation === Operation.SALE && styles.operationSelected}
+                className={currentOperation === Operation.SALE ? styles.operationSelected : ''}
                 style={{ paddingRight: 10 }}
               >
                 Sale

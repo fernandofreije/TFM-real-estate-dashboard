@@ -7,6 +7,8 @@ import { Summary } from '../../models/Summary';
 import styles from '../../styles/ProvinceView.module.css';
 import { thousandsAsK, withSeparator } from '../../util/NumberUtil';
 import { Operation } from '../../models/Operation';
+import RealEstateList from '../../components/RealEstateList';
+import { RealEstate } from '../../models/RealEstate';
 
 interface ProvinceViewProps {
   todaySummary: Summary;
@@ -18,63 +20,78 @@ export default function ProvinceView({ todaySummary, province, operation }: Prov
   const { avg_price, avg_size, total } = todaySummary;
 
   const [summaries, setSummaries] = useState<Summary[]>(undefined);
+  const [realEstates, setRealEstates] = useState<RealEstate[]>(undefined);
 
   useEffect(() => {
     const getSummaries = async () => {
       const response = await fetch(`/api/summaries?province=${province}&operation=${operation}`);
-      console.log(response);
       if (response.ok) {
         setSummaries(await response.json());
       }
     };
+    const getRealEstates = async () => {
+      const response = await fetch(`/api/realEstates?province=${province}&operation=${operation}`);
+      if (response.ok) {
+        setRealEstates(await response.json());
+      }
+    };
     getSummaries();
+    getRealEstates();
   }, []);
 
   return (
     <Layout>
-      <div className={styles.container}>
-        <h1>{province} Today</h1>
-        <h3>
-          Total Records: <span>{total}</span>
-        </h3>
-        <h3>
-          Average Price: <span>{withSeparator(avg_price)} €</span>
-        </h3>
-        <h3>
-          Average Size:{' '}
-          <span>
-            {Math.round(avg_size * 10) / 10} m<sup>2</sup>
-          </span>
-        </h3>
+      <div className={styles.leftColumn}>
+        <div className={styles.container}>
+          <h1>{province} Today</h1>
+          <h3>
+            Total Records: <span>{total}</span>
+          </h3>
+          <h3>
+            Average Price: <span>{withSeparator(avg_price)} €</span>
+          </h3>
+          <h3>
+            Average Size:{' '}
+            <span>
+              {Math.round(avg_size * 10) / 10} m<sup>2</sup>
+            </span>
+          </h3>
+        </div>
+        <div className={styles.container}>
+          <h2>Total of new real estate published by day</h2>
+          <LinearGraph
+            summaries={summaries}
+            YaxisField={'total'}
+            XaxisField={'created_at_date'}
+            xFormatter={(xValue: string) => new Date(xValue).toLocaleDateString()}
+          />
+        </div>
+        <div className={styles.container}>
+          <h2>Average price of new real estate published by day</h2>
+          <LinearGraph
+            summaries={summaries}
+            YaxisField={'avg_price'}
+            XaxisField={'created_at_date'}
+            YFormatter={(yValue: number) => `${thousandsAsK(yValue)} €`}
+            xFormatter={(xValue: string) => new Date(xValue).toLocaleDateString()}
+          />
+        </div>
+        <div className={styles.container}>
+          <h2>Average size of new real estate published by day</h2>
+          <LinearGraph
+            summaries={summaries}
+            YaxisField={'avg_size'}
+            XaxisField={'created_at_date'}
+            YFormatter={(yValue: number) => `${withSeparator(yValue)} m²`}
+            xFormatter={(xValue: string) => new Date(xValue).toLocaleDateString()}
+          />
+        </div>
       </div>
-      <div className={styles.container}>
-        <h2>Total of new real estate published by day</h2>
-        <LinearGraph
-          summaries={summaries}
-          YaxisField={'total'}
-          XaxisField={'created_at_date'}
-          xFormatter={(xValue: string) => new Date(xValue).toLocaleDateString()}
-        />
-      </div>
-      <div className={styles.container}>
-        <h2>Average price of new real estate published by day</h2>
-        <LinearGraph
-          summaries={summaries}
-          YaxisField={'avg_price'}
-          XaxisField={'created_at_date'}
-          YFormatter={(yValue: number) => `${thousandsAsK(yValue)} €`}
-          xFormatter={(xValue: string) => new Date(xValue).toLocaleDateString()}
-        />
-      </div>
-      <div className={styles.container}>
-        <h2>Average size of new real estate published by day</h2>
-        <LinearGraph
-          summaries={summaries}
-          YaxisField={'avg_size'}
-          XaxisField={'created_at_date'}
-          YFormatter={(yValue: number) => `${withSeparator(yValue)} m²`}
-          xFormatter={(xValue: string) => new Date(xValue).toLocaleDateString()}
-        />
+      <div className={styles.rightColumn}>
+        <div className={styles.container}>
+          <h2>Last real estates</h2>
+          <RealEstateList realEstates={realEstates} />
+        </div>
       </div>
     </Layout>
   );
@@ -92,11 +109,12 @@ export async function getServerSideProps({
   if (!operation || !Object.values(Operation).includes(operation)) {
     res.statusCode = 302;
     res.setHeader('Location', req.url + `?operation=${Operation.SALE}`);
-    return;
+    return {} as GetServerSidePropsResult<ProvinceViewProps>;
   }
 
   const todaySummary = await new RealEstateMongoDriver().todaysSummary({ province, operation });
 
+  console.log(todaySummary);
   return {
     props: {
       todaySummary,

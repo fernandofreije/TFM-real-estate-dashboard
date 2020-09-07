@@ -80,11 +80,18 @@ export class RealEstateMongoDriver {
         await this.client.connect();
       }
 
+      const yesterday = new Date();
+      yesterday.setHours(0, 0, 0, 0);
+      yesterday.setDate(yesterday.getDate() - 1);
+
       return this.client
         .db('real_estate')
         .collection('flats')
-        .find({ province, operation }, { projection: { _id: 0 } })
-        .sort({ created_at: 1 })
+        .find(
+          { province, operation, 'page-position': { $ne: null }, created_at: { $gte: yesterday } },
+          { projection: { _id: 0 } },
+        )
+        .sort({ 'page-position': 1 })
         .limit(10)
         .toArray();
     } catch (e) {

@@ -3,5 +3,5 @@ export function withSeparator(x: number, decimals?: number): string {
 }
 
 export function thousandsAsK(x: number, decimals?: number): string {
-  return `${(x / 1000).toFixed(0)}K`;
+  return x > 1000 ? `${(x / 1000).toFixed(decimals || 0)}K` : x.toFixed(decimals || 0);
 }

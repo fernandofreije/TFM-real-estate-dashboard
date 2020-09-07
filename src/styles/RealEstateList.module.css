@@ -1,5 +1,5 @@
 .listContainer {
-  height: 700px;
+  max-height: 1500px;
   overflow-y: auto;
   overflow: -moz-scrollbars-none;
   -ms-overflow-style: none;

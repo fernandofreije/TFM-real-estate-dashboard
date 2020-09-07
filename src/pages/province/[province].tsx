@@ -44,7 +44,7 @@ export default function ProvinceView({ todaySummary, province, operation }: Prov
   }, []);
 
   return (
-    <Layout>
+    <Layout province={province} currentOperation={operation}>
       <div className={styles.column}>
         <div className={styles.container}>
           <h1>{province === 'all' ? 'España' : province} Today</h1>
@@ -76,7 +76,9 @@ export default function ProvinceView({ todaySummary, province, operation }: Prov
             summaries={summaries}
             YaxisField={'avg_price'}
             XaxisField={'created_at_date'}
-            YFormatter={(yValue: number) => `${thousandsAsK(yValue)} €`}
+            YFormatter={(yValue: number) =>
+              `${operation === Operation.SALE ? thousandsAsK(yValue) : withSeparator(yValue)} €`
+            }
             xFormatter={(xValue: string) => new Date(xValue).toLocaleDateString()}
           />
         </div>

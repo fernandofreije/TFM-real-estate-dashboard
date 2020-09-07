@@ -32,7 +32,7 @@ export default function Layout({ children, province, currentOperation }: LayoutP
               </a>
             </Link>
             <Link href={`${province}?operation=${Operation.RENT}`}>
-              <a className={currentOperation === Operation.RENT && styles.operationSelected}>Rent</a>
+              <a className={currentOperation === Operation.RENT ? styles.operationSelected : ''}>Rent</a>
             </Link>
           </div>
         )}

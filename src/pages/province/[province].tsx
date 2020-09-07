@@ -12,15 +12,26 @@ import { RealEstate } from '../../models/RealEstate';
 
 interface ProvinceViewProps {
   todaySummary: Summary;
+  lastTwoSummaries: Summary[];
   province: string;
   operation: string;
 }
 
-export default function ProvinceView({ todaySummary, province, operation }: ProvinceViewProps): ReactElement {
-  const { avg_price, avg_size, total } = todaySummary;
-
+export default function ProvinceView({
+  todaySummary,
+  lastTwoSummaries,
+  province,
+  operation,
+}: ProvinceViewProps): ReactElement {
+  const [todayNewSummary, yesterdayNewSummary] = lastTwoSummaries;
   const [summaries, setSummaries] = useState<Summary[]>(undefined);
   const [realEstates, setRealEstates] = useState<RealEstate[]>(undefined);
+
+  const getDifference = (yesterday, today) => ((today - yesterday) / today) * 100;
+
+  const totalDifference = getDifference(yesterdayNewSummary.total, todayNewSummary.total);
+  const priceDifference = getDifference(yesterdayNewSummary.avg_price, todayNewSummary.avg_price);
+  const sizeDifference = getDifference(yesterdayNewSummary.avg_size, todayNewSummary.avg_size);
 
   useEffect(() => {
     const getSummaries = async () => {
@@ -46,20 +57,52 @@ export default function ProvinceView({ todaySummary, province, operation }: Prov
   return (
     <Layout province={province} currentOperation={operation}>
       <div className={styles.column}>
-        <div className={styles.container}>
-          <h1>{province === 'all' ? 'España' : province} Today</h1>
-          <h3>
-            Published Records: <span>{withSeparator(total)}</span>
-          </h3>
-          <h3>
-            Average Price: <span>{withSeparator(avg_price)} €</span>
-          </h3>
-          <h3>
-            Average Size:{' '}
-            <span>
-              {Math.round(avg_size * 10) / 10} m<sup>2</sup>
-            </span>
-          </h3>
+        <div className={styles.container} style={{ display: 'flex' }}>
+          <div>
+            <h1>{province === 'all' ? 'España' : province} Published</h1>
+            <h3>
+              Published Records: <span>{withSeparator(todaySummary.total)}</span>
+            </h3>
+            <h3>
+              Average Price: <span>{withSeparator(todaySummary.avg_price)} €</span>
+            </h3>
+            <h3>
+              Average Size:{' '}
+              <span>
+                {Math.round(todaySummary.avg_size * 10) / 10} m<sup>2</sup>
+              </span>
+            </h3>
+          </div>
+          <div style={{ marginLeft: 50 }}>
+            <h1>{province === 'all' ? 'España' : province} New Today</h1>
+            <h3>
+              Published Records:{' '}
+              <span>
+                {withSeparator(todayNewSummary.total)}{' '}
+                <span className={totalDifference > 0 ? styles.positive : styles.negative}>
+                  ({withSeparator(totalDifference)} %)
+                </span>
+              </span>
+            </h3>
+            <h3>
+              Average Price:{' '}
+              <span>
+                {withSeparator(todayNewSummary.avg_price)} €{' '}
+                <span className={priceDifference > 0 ? styles.positive : styles.negative}>
+                  ({withSeparator(priceDifference)} %)
+                </span>
+              </span>
+            </h3>
+            <h3>
+              Average Size:{' '}
+              <span>
+                {Math.round(todayNewSummary.avg_size * 10) / 10} m<sup>2 </sup>
+                <span className={sizeDifference > 0 ? styles.positive : styles.negative}>
+                  ({withSeparator(sizeDifference)} %)
+                </span>
+              </span>
+            </h3>
+          </div>
         </div>
         <div className={styles.container}>
           <h2>Total of new real estate published by day</h2>
@@ -95,7 +138,7 @@ export default function ProvinceView({ todaySummary, province, operation }: Prov
       </div>
       <div className={styles.column}>
         <div className={styles.container}>
-          <h2>Last real estates</h2>
+          <h2>Lastest records</h2>
           <RealEstateList realEstates={realEstates} />
         </div>
       </div>
@@ -119,10 +162,12 @@ export async function getServerSideProps({
   }
 
   const todaySummary = await new RealEstateMongoDriver().todaysSummary({ province, operation });
+  const lastTwoSummaries = await new RealEstateMongoDriver().lastNewSummaries({ province, operation });
 
   return {
     props: {
       todaySummary,
+      lastTwoSummaries,
       province,
       operation,
     },

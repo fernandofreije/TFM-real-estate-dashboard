@@ -38,6 +38,7 @@
 
 .operationSelected {
   font-weight: bold;
+  color: #8884d8;
 }
 
 @media (max-width: 600px) {

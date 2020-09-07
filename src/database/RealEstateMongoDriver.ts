@@ -48,7 +48,29 @@ export class RealEstateMongoDriver {
     }
   }
 
-  public async newSummariesLasYear(
+  public async lastNewSummaries(
+    { province, operation }: TodaySummaryParams = { province: 'all', operation: 'all' },
+  ): Promise<Summary[]> {
+    try {
+      if (!this.client.isConnected()) {
+        await this.client.connect();
+      }
+
+      return this.client
+        .db('real_estate')
+        .collection('summary')
+        .find({ province, operation, created_at_date: { $ne: null } }, { projection: { _id: 0, created_at_date: 0 } })
+        .sort({ created_at_date: -1 })
+        .limit(2)
+        .toArray();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.client.close();
+    }
+  }
+
+  public async newSummaries(
     { province, operation }: TodaySummaryParams = { province: 'all', operation: 'all' },
   ): Promise<Summary[]> {
     try {
@@ -63,7 +85,7 @@ export class RealEstateMongoDriver {
       return this.client
         .db('real_estate')
         .collection('summary')
-        .find({ province, operation, created_at_date: { $gte: oneMonthAgo, $ne: 'all' } }, { projection: { _id: 0 } })
+        .find({ province, operation, created_at_date: { $gte: oneMonthAgo, $ne: null } }, { projection: { _id: 0 } })
         .sort({ created_at_date: 1 })
         .toArray();
     } catch (e) {
@@ -92,7 +114,7 @@ export class RealEstateMongoDriver {
           { ...(province && { province }), operation, 'page-position': { $ne: null }, created_at: { $gte: yesterday } },
           { projection: { _id: 0 } },
         )
-        .sort({ 'page-position': 1, created_at: 1 })
+        .sort({ 'page-position': 1, created_at: -1 })
         .limit(10)
         .toArray();
     } catch (e) {

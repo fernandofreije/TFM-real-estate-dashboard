@@ -13,6 +13,14 @@
   flex: 1;
 }
 
+.positive {
+  color: green;
+}
+
+.negative {
+  color: red;
+}
+
 @media (max-width: 600px) {
   .container {
     width: 90%;

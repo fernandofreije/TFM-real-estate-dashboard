@@ -1,5 +1,6 @@
 import { MongoClient } from 'mongodb';
 import { Summary } from '../models/Summary';
+import { RealEstate } from '../models/RealEstate';
 
 interface TodaySummaryParams {
   province: string;
@@ -74,7 +75,7 @@ export class RealEstateMongoDriver {
 
   public async lastRecords(
     { province, operation }: TodaySummaryParams = { province: 'all', operation: 'all' },
-  ): Promise<any> {
+  ): Promise<RealEstate[]> {
     try {
       if (!this.client.isConnected()) {
         await this.client.connect();
@@ -88,10 +89,10 @@ export class RealEstateMongoDriver {
         .db('real_estate')
         .collection('flats')
         .find(
-          { province, operation, 'page-position': { $ne: null }, created_at: { $gte: yesterday } },
+          { ...(province && { province }), operation, 'page-position': { $ne: null }, created_at: { $gte: yesterday } },
           { projection: { _id: 0 } },
         )
-        .sort({ 'page-position': 1 })
+        .sort({ 'page-position': 1, created_at: 1 })
         .limit(10)
         .toArray();
     } catch (e) {

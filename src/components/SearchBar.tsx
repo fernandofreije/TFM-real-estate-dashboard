@@ -32,7 +32,7 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
 
   const getSuggestionValue = (suggestion) => suggestion;
   const renderSuggestion = (suggestion) => (
-    <Link href={`/province/${suggestion}`}>
+    <Link href={`/province/${suggestion === 'España' ? 'all' : suggestion}`}>
       <span>{suggestion}</span>
     </Link>
   );
@@ -50,7 +50,7 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
 
   const onSuggestionSelected = () => {
     if (suggestions.includes(value)) {
-      router.push(`/province/${value}`);
+      router.push(`/province/${value === 'España' ? 'all' : value}`);
     }
   };
 

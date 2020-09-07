@@ -30,7 +30,11 @@ export default function ProvinceView({ todaySummary, province, operation }: Prov
       }
     };
     const getRealEstates = async () => {
-      const response = await fetch(`/api/realEstates?province=${province}&operation=${operation}`);
+      const url =
+        province === 'all'
+          ? `/api/realEstates?operation=${operation}`
+          : `/api/realEstates?province=${province}&operation=${operation}`;
+      const response = await fetch(url);
       if (response.ok) {
         setRealEstates(await response.json());
       }
@@ -43,9 +47,9 @@ export default function ProvinceView({ todaySummary, province, operation }: Prov
     <Layout>
       <div className={styles.leftColumn}>
         <div className={styles.container}>
-          <h1>{province} Today</h1>
+          <h1>{province === 'all' ? 'España' : province} Today</h1>
           <h3>
-            Total Records: <span>{total}</span>
+            Published Records: <span>{withSeparator(total)}</span>
           </h3>
           <h3>
             Average Price: <span>{withSeparator(avg_price)} €</span>
@@ -114,7 +118,6 @@ export async function getServerSideProps({
 
   const todaySummary = await new RealEstateMongoDriver().todaysSummary({ province, operation });
 
-  console.log(todaySummary);
   return {
     props: {
       todaySummary,

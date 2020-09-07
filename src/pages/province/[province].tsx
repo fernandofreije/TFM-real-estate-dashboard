@@ -45,7 +45,7 @@ export default function ProvinceView({ todaySummary, province, operation }: Prov
 
   return (
     <Layout>
-      <div className={styles.leftColumn}>
+      <div className={styles.column}>
         <div className={styles.container}>
           <h1>{province === 'all' ? 'España' : province} Today</h1>
           <h3>
@@ -91,7 +91,7 @@ export default function ProvinceView({ todaySummary, province, operation }: Prov
           />
         </div>
       </div>
-      <div className={styles.rightColumn}>
+      <div className={styles.column}>
         <div className={styles.container}>
           <h2>Last real estates</h2>
           <RealEstateList realEstates={realEstates} />

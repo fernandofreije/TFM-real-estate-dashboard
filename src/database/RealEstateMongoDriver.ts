@@ -55,14 +55,14 @@ export class RealEstateMongoDriver {
         await this.client.connect();
       }
 
-      const oneYearAgo = new Date();
-      oneYearAgo.setHours(0, 0, 0, 0);
-      oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+      const oneMonthAgo = new Date();
+      oneMonthAgo.setHours(0, 0, 0, 0);
+      oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
       return this.client
         .db('real_estate')
         .collection('summary')
-        .find({ province, operation, created_at_date: { $gte: oneYearAgo, $ne: 'all' } }, { projection: { _id: 0 } })
+        .find({ province, operation, created_at_date: { $gte: oneMonthAgo, $ne: 'all' } }, { projection: { _id: 0 } })
         .sort({ created_at_date: 1 })
         .toArray();
     } catch (e) {

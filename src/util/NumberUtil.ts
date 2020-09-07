@@ -1,6 +1,7 @@
 export function withSeparator(x: number, decimals?: number): string {
-  return x
-    .toFixed(decimals)
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return Intl.NumberFormat('es', { maximumFractionDigits: decimals || 0 }).format(x);
+}
+
+export function thousandsAsK(x: number, decimals?: number): string {
+  return `${(x / 1000).toFixed(0)}K`;
 }

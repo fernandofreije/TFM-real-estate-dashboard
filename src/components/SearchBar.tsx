@@ -15,8 +15,6 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
       provinces = await response.json();
     }
 
-    console.log(provinces);
-
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
 

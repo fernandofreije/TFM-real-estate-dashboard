@@ -4,7 +4,6 @@ import nc from 'next-connect';
 
 export default nc().get(async (req: NextApiRequest, res: NextApiResponse) => {
   const { province, operation } = req.query as { province: string; operation: string };
-  const summary = await new RealEstateMongoDriver().todaysSummary({ province, operation });
-  console.log(summary);
-  return res.status(200).json(summary);
+  const summaries = await new RealEstateMongoDriver().newSummariesLasYear({ province, operation });
+  return res.status(200).json(summaries);
 });

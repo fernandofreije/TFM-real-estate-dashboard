@@ -46,4 +46,51 @@ export class RealEstateMongoDriver {
       this.client.close();
     }
   }
+
+  public async newSummariesLasYear(
+    { province, operation }: TodaySummaryParams = { province: 'all', operation: 'all' },
+  ): Promise<Summary[]> {
+    try {
+      if (!this.client.isConnected()) {
+        await this.client.connect();
+      }
+
+      const oneYearAgo = new Date();
+      oneYearAgo.setHours(0, 0, 0, 0);
+      oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+
+      return this.client
+        .db('real_estate')
+        .collection('summary')
+        .find({ province, operation, created_at_date: { $gte: oneYearAgo, $ne: 'all' } }, { projection: { _id: 0 } })
+        .sort({ created_at_date: 1 })
+        .toArray();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.client.close();
+    }
+  }
+
+  public async lastRecords(
+    { province, operation }: TodaySummaryParams = { province: 'all', operation: 'all' },
+  ): Promise<any> {
+    try {
+      if (!this.client.isConnected()) {
+        await this.client.connect();
+      }
+
+      return this.client
+        .db('real_estate')
+        .collection('flats')
+        .find({ province, operation }, { projection: { _id: 0 } })
+        .sort({ created_at: 1 })
+        .limit(10)
+        .toArray();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.client.close();
+    }
+  }
 }

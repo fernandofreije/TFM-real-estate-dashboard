@@ -1,6 +1,6 @@
 export interface Summary {
   id: string;
-  created_date_at: Date;
+  created_at_date: Date;
   operation: string;
   province: string;
   avg_price: number;

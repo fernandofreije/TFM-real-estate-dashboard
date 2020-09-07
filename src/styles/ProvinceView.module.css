@@ -1,7 +1,8 @@
 .container {
   background-color: #121212;
   padding: 20px;
-  margin: 0;
+  margin: 20px;
+  border-left: solid 2px #8884d8;
 }
 
 @media (max-width: 600px) {

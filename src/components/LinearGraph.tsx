@@ -8,6 +8,7 @@ import {
   YAxis,
   TickFormatterFunction,
   ResponsiveContainer,
+  TooltipFormatter,
 } from 'recharts';
 import { Summary } from '../models/Summary';
 import Loading from './Loading';
@@ -19,6 +20,7 @@ interface LinearGraphProps {
   XaxisField?: keyof Summary;
   xFormatter?: TickFormatterFunction;
   YFormatter?: TickFormatterFunction;
+  tooltopFormatter?: TooltipFormatter;
 }
 
 export default function LinearGraph({
@@ -27,6 +29,7 @@ export default function LinearGraph({
   XaxisField,
   xFormatter,
   YFormatter,
+  tooltopFormatter,
 }: LinearGraphProps): ReactElement {
   if (!summaries) return <Loading />;
 
@@ -37,7 +40,7 @@ export default function LinearGraph({
         <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
         <XAxis dataKey={XaxisField} tickFormatter={xFormatter} />
         <YAxis tickFormatter={YFormatter} />
-        <Tooltip formatter={(value: number) => withSeparator(value)} />
+        <Tooltip formatter={tooltopFormatter} labelStyle={{ color: 'black' }} labelFormatter={xFormatter} label={''} />
       </LineChart>
     </ResponsiveContainer>
   );

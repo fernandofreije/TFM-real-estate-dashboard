@@ -111,6 +111,7 @@ export default function ProvinceView({
             YaxisField={'total'}
             XaxisField={'created_at_date'}
             xFormatter={(xValue: string) => new Date(xValue).toLocaleDateString()}
+            tooltopFormatter={(value: number, _: string) => [withSeparator(value), 'Total Published']}
           />
         </div>
         <div className={styles.container}>
@@ -123,6 +124,7 @@ export default function ProvinceView({
               `${operation === Operation.SALE ? thousandsAsK(yValue) : withSeparator(yValue)} €`
             }
             xFormatter={(xValue: string) => new Date(xValue).toLocaleDateString()}
+            tooltopFormatter={(value: number, _: string) => [`${withSeparator(value)} €`, 'Average Price']}
           />
         </div>
         <div className={styles.container}>
@@ -133,6 +135,7 @@ export default function ProvinceView({
             XaxisField={'created_at_date'}
             YFormatter={(yValue: number) => `${withSeparator(yValue)} m²`}
             xFormatter={(xValue: string) => new Date(xValue).toLocaleDateString()}
+            tooltopFormatter={(value: number, _: string) => [`${withSeparator(value)} m²`, 'Average Size']}
           />
         </div>
       </div>

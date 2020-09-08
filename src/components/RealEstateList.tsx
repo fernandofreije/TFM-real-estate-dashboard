@@ -18,7 +18,10 @@ export default function RealEstateList({ realEstates }: RealestateListProps): Re
     <div className={styles.listContainer}>
       {realEstates.map((realEstate) => (
         <div className={styles.realEstateContainer} key={realEstate.remote_id}>
-          <img className={styles.image} src={realEstate.imageLink}></img>
+          <img
+            className={styles.image}
+            src={realEstate.imageLink.includes('http') ? realEstate.imageLink : '/assets/home-generic.svg'}
+          ></img>
           <div className={styles.realEstateData}>
             <span className={styles.title}>
               <a href={realEstate.link}>{realEstate.description}</a>

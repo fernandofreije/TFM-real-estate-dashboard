@@ -35,6 +35,10 @@
   height: 150px;
 }
 
+.image path {
+  fill: #fff;
+}
+
 @media (max-width: 600px) {
   .listContainer {
     height: inherit;

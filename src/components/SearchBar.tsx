@@ -8,15 +8,27 @@ import { useRouter } from 'next/router';
 export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement {
   const router = useRouter();
 
-  const getSuggestions = async (value: string) => {
-    let provinces: string[] = [];
-    const response = await fetch('/api/provinces');
-    if (response.ok) {
-      provinces = await response.json();
-    }
+  const [provinces, setProvinces] = useState([]);
 
+  const requestProvinces = async () => {
+    if (provinces.length === 0) {
+      console.log('entra');
+      const response = await fetch('/api/provinces');
+      if (response.ok) {
+        setProvinces(await response.json());
+      }
+    }
+  };
+
+  const getSuggestions = async (value: string) => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
+
+    console.log(provinces);
+
+    await requestProvinces();
+
+    console.log(provinces);
 
     return inputLength === 0
       ? []

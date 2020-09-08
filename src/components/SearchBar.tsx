@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { ReactElement, useState } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 import Autosuggest from 'react-autosuggest';
 import styles from '../styles/SearchBar.module.css';
 import Link from 'next/link';
@@ -10,9 +10,12 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
 
   const [provinces, setProvinces] = useState([]);
 
+  useEffect(() => {
+    requestProvinces();
+  }, []);
+
   const requestProvinces = async () => {
     if (provinces.length === 0) {
-      console.log('entra');
       const response = await fetch('/api/provinces');
       if (response.ok) {
         setProvinces(await response.json());
@@ -20,15 +23,9 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
     }
   };
 
-  const getSuggestions = async (value: string) => {
+  const getSuggestions = (value: string) => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
-
-    console.log(provinces);
-
-    await requestProvinces();
-
-    console.log(provinces);
 
     return inputLength === 0
       ? []
@@ -49,10 +46,8 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
     </Link>
   );
 
-  // Autosuggest will call this function every time you need to update suggestions.
-  // You already implemented this logic above, so just use it.
   const onSuggestionsFetchRequested = async ({ value }) => {
-    setSuggestions(await getSuggestions(value));
+    setSuggestions(getSuggestions(value));
   };
 
   // Autosuggest will call this function every time you need to clear suggestions.

@@ -1,11 +1,38 @@
 .input {
   font-size: 40px;
+  width: 500px;
 }
 
 .container {
   margin-top: 20px;
 }
 
+.input {
+  border-radius: 10px;
+  border: 3px solid #8884d8;
+  background-color: black;
+  color: white;
+}
+
+.input::placeholder {
+  color: #8884d8;
+}
+
 .suggestion {
   font-size: 25px;
+  font-weight: bold;
+}
+
+.suggestionsContainerOpen {
+  position: absolute;
+  background-color: #121212;
+  z-index: 100;
+  width: 500px;
+  border-radius: 10px;
+  border: 3px dotted #8884d8;
+  border-top: none;
+}
+
+.suggestionsContainer > ul {
+  list-style-type: none;
 }

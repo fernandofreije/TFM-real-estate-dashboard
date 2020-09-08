@@ -42,7 +42,7 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
   const getSuggestionValue = (suggestion) => suggestion;
   const renderSuggestion = (suggestion) => (
     <Link href={`/province/${suggestion === 'España' ? 'all' : suggestion}`}>
-      <span>{suggestion}</span>
+      <a>{suggestion}</a>
     </Link>
   );
 
@@ -78,7 +78,6 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
       getSuggestionValue={getSuggestionValue}
       renderSuggestion={renderSuggestion}
       {...props}
-      className={styles.container}
     />
   );
 }

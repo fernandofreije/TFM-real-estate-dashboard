@@ -43,7 +43,7 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
 
   const getSuggestionValue = (suggestion) => (suggestion === 'all' ? 'España' : suggestion);
   const renderSuggestion = (suggestion) => (
-    <Link href={`/province/${suggestion === 'España' ? 'all' : suggestion}`}>
+    <Link href={`/province/${suggestion.toLowerCase() === 'españa' ? 'all' : suggestion}`}>
       <a>{suggestion === 'all' ? 'España' : suggestion}</a>
     </Link>
   );

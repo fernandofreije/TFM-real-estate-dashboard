@@ -29,7 +29,9 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
 
     return inputLength === 0
       ? []
-      : provinces.filter((provinces) => provinces.toLowerCase().slice(0, inputLength) === inputValue);
+      : provinces.filter(
+          (province) => (province === 'all' ? 'españa' : province.toLowerCase()).slice(0, inputLength) === inputValue,
+        );
   };
 
   const [value, setValue] = useState('');

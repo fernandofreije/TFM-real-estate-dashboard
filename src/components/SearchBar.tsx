@@ -59,7 +59,7 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
 
   const onSuggestionSelected = () => {
     if (suggestions.includes(value) || value.toLowerCase() === 'españa') {
-      router.push(`/province/${value === 'España' ? 'all' : value}`);
+      router.push(`/province/${value.toLowerCase() === 'españa' ? 'all' : value}`);
     }
   };
 

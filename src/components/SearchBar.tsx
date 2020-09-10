@@ -41,7 +41,7 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
     setValue(newValue);
   };
 
-  const getSuggestionValue = (suggestion) => suggestion;
+  const getSuggestionValue = (suggestion) => (suggestion === 'all' ? 'España' : suggestion);
   const renderSuggestion = (suggestion) => (
     <Link href={`/province/${suggestion === 'España' ? 'all' : suggestion}`}>
       <a>{suggestion === 'all' ? 'España' : suggestion}</a>
@@ -58,7 +58,7 @@ export default function SearchBar(props: JSX.IntrinsicAttributes): ReactElement 
   };
 
   const onSuggestionSelected = () => {
-    if (suggestions.includes(value)) {
+    if (suggestions.includes(value) || value.toLowerCase() === 'españa') {
       router.push(`/province/${value === 'España' ? 'all' : value}`);
     }
   };
